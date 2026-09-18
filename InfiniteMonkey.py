@@ -1,20 +1,17 @@
+import math
 import random
+import string
 from math import floor
 
-Alphabet = [
-    "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
-    "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
-    "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
-    "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
-    " "
-]
+Alphabet = list(string.ascii_letters + string.digits + string.punctuation + " ")
 
 population_Pool = []
-POP_COUNT = 50000
+POP_COUNT = 1000
 
 target_String = input("what is your target String? ")
 GENE_COUNT = len(target_String)
 GEN_NUM = 0
+MUTATION_RATE = 0.01
 
 target_Bred = False
 
@@ -24,16 +21,16 @@ class DNA:
         self.length = length
         self.genes = []
         self.fitness = 0
-        self.score = 0
 
         for i in range(self.length):
             self.genes.append(random.choice(Alphabet))
 
     def calculateFitness(self):
+        score = 0
         for i in range(0, self.length):
             if self.genes[i] == target_String[i]:
-                self.score += 1
-        self.fitness = self.score / self.length
+                score += 1
+        self.fitness = 2**score
         return self.fitness
 
 
@@ -65,7 +62,7 @@ def draw():
 
     for i in range(len(population_Pool)):
         if ''.join(population_Pool[i].genes) == target_String:
-            print(''.join(population_Pool[i].genes) + "\nThis took " + str(GEN_NUM) + " generations to breed")
+            print("BEHOLD: " + ''.join(population_Pool[i].genes) + "\nThis took " + str(GEN_NUM) + " generations to breed")
             target_Bred = True
             return
         parentA = random.choice(mating_Pool)
@@ -100,7 +97,7 @@ def cross(parentA, parentB):
 def mutate(child):
     mut_Chance = random.random()
     for i in range(child.length):
-        if mut_Chance < .01:
+        if mut_Chance < MUTATION_RATE:
             child.genes[i] = random.choice(Alphabet)
     return child
 
