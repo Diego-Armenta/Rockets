@@ -62,7 +62,7 @@ class Rocket:
         self.geneCounter = 0
 
     def applyForce(self, force):
-        self.acceleration =+ force
+        self.acceleration += force
 
     def update(self):
         self.velocity += self.acceleration
@@ -150,7 +150,7 @@ class Population:
 
     def breed(self, parentA, parentB):
         child = DNA()
-        i = random.randint(0, LIFESPAN)
+        i = random.randrange(LIFESPAN)
         who_First = random.random()
 
         if who_First > .5:
@@ -172,13 +172,13 @@ class Population:
 
     #Amount of genes is equivalent to LIFESPAN
     def mutate(self, child):
-        mut_Chance = random.random()
         for i in range(LIFESPAN):
+            mut_Chance = random.random()
             if mut_Chance < MUTATION_RATE:
                 angle = random.uniform(0, 2 * math.pi)
                 magnitude = random.uniform(0, child.maxForce)
                 gene = p.Vector2(math.cos(angle) * magnitude, math.sin(angle) * magnitude)
-                child.genes.append(gene)
+                child.genes[i]=(gene)
         return child
 
     def live(self,screen):
